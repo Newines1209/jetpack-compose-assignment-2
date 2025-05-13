@@ -8,6 +8,11 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+retrofit = "2.9.0"
+room = "2.6.1"
+coroutines = "1.7.3"
+lifecycle = "2.7.0"
+navigation = "2.7.7"
 compose-compiler = "1.5.15" # or latest stable
 
 
@@ -26,6 +31,24 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+# Retrofit
+retrofit = "com.squareup.retrofit2:retrofit:${versions.retrofit}"
+gson = "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
+
+# Room
+room-runtime = "androidx.room:room-runtime:${versions.room}"
+room-ktx = "androidx.room:room-ktx:${versions.room}"
+room-compiler = "androidx.room:room-compiler:${versions.room}"
+
+# Coroutines
+coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
+
+# Lifecycle & ViewModel
+lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycle}"
+viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:${versions.lifecycle}"
+
+# Navigation
+navigation-compose = "androidx.navigation:navigation-compose:${versions.navigation}"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
