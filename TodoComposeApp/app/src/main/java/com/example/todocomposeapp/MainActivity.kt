@@ -3,45 +3,58 @@ package com.example.todocomposeapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import androidx.navigation.navArgument
+import androidx.room.Room
+import com.example.todocomposeapp.data.local.TodoDatabase
+import com.example.todocomposeapp.data.remote.RetrofitClient
+import com.example.todocomposeapp.data.repository.TodoRepository
+import com.example.todocomposeapp.ui.screens.TodoDetailScreen
+import com.example.todocomposeapp.ui.screens.TodoListScreen
+import com.example.todocomposeapp.viewmodel.TodoDetailViewModel
+import com.example.todocomposeapp.viewmodel.TodoListViewModel
 import com.example.todocomposeapp.ui.theme.TodoComposeAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Room database instance
+        val db = Room.databaseBuilder(
+            applicationContext,
+            TodoDatabase::class.java,
+            "todos.db"
+        ).build()
+
+        // Shared repository instance
+        val repository = TodoRepository(RetrofitClient.apiService, db.todoDao())
+
         setContent {
             TodoComposeAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "list") {
+                    composable("list") {
+                        val viewModel: TodoListViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                return TodoListViewModel(repository) as T
+                            }
+                        })
+                        TodoListScreen(navController = navController, viewModel = viewModel)
+                    }
+
+                    composable(
+                        "detail/{todoId}",
+                        arguments = listOf(navArgument("todoId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val todoId = backStackEntry.arguments?.getInt("todoId") ?: 0
+                        val viewModel: TodoDetailViewModel = viewModel(factory = TodoDetailViewModel.Factory(db.todoDao(), todoId))
+                        TodoDetailScreen(navController = navController, viewModel = viewModel, todoId = todoId)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TodoComposeAppTheme {
-        Greeting("Android")
     }
 }

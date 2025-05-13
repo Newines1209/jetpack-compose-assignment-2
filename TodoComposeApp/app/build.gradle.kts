@@ -2,10 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")// for kapt
+    id("com.google.devtools.ksp")
 
 }
-
 android {
     namespace = "com.example.todocomposeapp"
     compileSdk = 35
@@ -39,15 +38,11 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -61,6 +56,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Ksp
+    ksp(libs.room.compiler)
+
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.gson)
@@ -68,7 +69,7 @@ dependencies {
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)
+
 
     // Coroutines
     implementation(libs.coroutines.android)
@@ -79,6 +80,10 @@ dependencies {
 
     // Navigation
     implementation(libs.navigation.compose)
+    implementation(libs.navigation.room.common.jvm)
+
+
+    implementation(libs.androidx.media3.exoplayer)
 
 
 }
