@@ -10,7 +10,7 @@ import com.example.todocomposeapp.R
 
 val AppFont = FontFamily(Font(R.font.roboto_regular), Font(R.font.roboto_medium, FontWeight.Medium))
 
-val Typography = Typography(
+val AppTypography = Typography(
     displayLarge = TextStyle(fontFamily = AppFont, fontWeight = FontWeight.Bold, fontSize = 34.sp),
     titleLarge = TextStyle(fontFamily = AppFont, fontWeight = FontWeight.Medium, fontSize = 24.sp),
     titleMedium = TextStyle(fontFamily = AppFont, fontWeight = FontWeight.Medium, fontSize = 20.sp),

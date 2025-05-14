@@ -50,7 +50,11 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("todoId") { type = NavType.IntType })
                     ) { backStackEntry ->
                         val todoId = backStackEntry.arguments?.getInt("todoId") ?: 0
-                        val viewModel: TodoDetailViewModel = viewModel(factory = TodoDetailViewModel.Factory(db.todoDao(), todoId))
+                        val viewModel: TodoDetailViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                                return TodoDetailViewModel(repository,todoId) as T
+                            }
+                        })
                         TodoDetailScreen(navController = navController, viewModel = viewModel, todoId = todoId)
                     }
                 }

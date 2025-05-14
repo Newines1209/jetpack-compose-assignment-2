@@ -9,20 +9,18 @@ class TodoRepository(
     private val dao: TodoDao
 ) {
     suspend fun fetchTodos(): List<TodoEntity> {
-        return try {
-            val todos = api.getTodos()
-            val entities = todos.map {
-                TodoEntity(
-                    id = it.id,
-                    userId = it.userId,
-                    title = it.title,
-                    completed = it.completed
-                )
-            }
-            dao.insertAll(entities)
-            entities
-        } catch (e: Exception) {
-            dao.getAll() // fallback to cache
+        val todos = api.getTodos()
+        val entities = todos.map {
+            TodoEntity(
+                id = it.id,
+                userId = it.userId,
+                title = it.title,
+                completed = it.completed
+            )
         }
+        dao.insertAll(entities)
+        return entities
     }
+
+    suspend fun getCachedTodos(): List<TodoEntity> = dao.getAll()
 }

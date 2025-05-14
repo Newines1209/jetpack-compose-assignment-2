@@ -1,3 +1,4 @@
+// Theme.kt
 package com.example.todocomposeapp.ui.theme
 
 import android.os.Build
@@ -33,8 +34,9 @@ fun TodoComposeAppTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = LightColors,
+        typography = AppTypography,
         content = content
     )
 }
+
